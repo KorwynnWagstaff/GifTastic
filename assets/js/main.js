@@ -9,6 +9,19 @@ $(document).ready(function() {
 		event.preventDefault();
 		addGifBtn();
 	});
+	$(document).on("click", ".btnGif", function() {
+		var state = $(this).attr("data-state");
+		if (state == "stilL") {
+			var url = $(this).attr("data-animate");
+			$(this).attr("data-state", "animate");
+			$(this).attr("src", url);
+		}
+		else {
+			var url = $(this).attr("data-still");
+			$(this).attr("data-state", "still");
+			$(this).attr("src", url);
+		}
+	});
 
 	generateBtns();
 
@@ -24,7 +37,7 @@ $(document).ready(function() {
 	}
 	function displayGifs(gifName) {
 		$("#gifViewDiv").empty();
-      	var queryURL = "http://api.giphy.com/v1/gifs/search?q=" +
+      	var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
         	gifName + "&api_key=dc6zaTOxFJmzC&limit=10";
       	$.ajax({
           url: queryURL,
@@ -38,6 +51,9 @@ $(document).ready(function() {
             var p = $("<p>").text("Rating: " + rating.toUpperCase());
             var personImage = $("<img>");
             personImage.attr("src", results[i].images.fixed_height.url);
+            personImage.attr("data-still", results[i].images.fixed_height_still.url);
+            personImage.attr("data-animate", results[i].images.fixed_height.url);
+            personImage.addClass("btnGif");
             gifDiv.prepend(personImage);
             gifDiv.prepend(p);
             $("#gifViewDiv").prepend(gifDiv);
